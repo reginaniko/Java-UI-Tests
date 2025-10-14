@@ -12,7 +12,7 @@ public class CreateOrderTests extends BaseTest {
     String ingredientsJson;
 
     @Test
-    @DisplayName("Создать заказ без авторизации без ингридиентов")
+    @DisplayName("Create order with no ingredients without authorization")
     public void testCreateEmptyOrderWithNoAuth(){
         orderResponse = createOrderWithNoAuth("");
 
@@ -21,7 +21,7 @@ public class CreateOrderTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Создать заказ без авторизации c ингридиентами")
+    @DisplayName("Create order with ingredients without authorization")
     public void testCreateOrderWithNoAuth(){
 
         ingredientsJson = getIngredients();
@@ -32,7 +32,7 @@ public class CreateOrderTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Создать заказ с авторизацией без ингридиентов")
+    @DisplayName("Create order with no ingredients with authorization")
     public void testCreateEmptyOrderWithAuth(){
         userResponse = createUniqueUserAndReturnAsResponse(userRequest);//создать пользователя
         userResponseBody = userResponse.extract().as(UserResponse.class);//получть токен
@@ -43,7 +43,7 @@ public class CreateOrderTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Создать заказ с авторизацией c ингридиентами")
+    @DisplayName("Create order with ingredients with authorization")
     public void testCreateOrderWithAuth(){
         userResponse = createUniqueUserAndReturnAsResponse(userRequest);//создать пользователя
         userResponseBody = userResponse.extract().as(UserResponse.class);//получть токен

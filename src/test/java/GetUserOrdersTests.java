@@ -8,19 +8,19 @@ import static org.hamcrest.CoreMatchers.equalTo;
 public class GetUserOrdersTests extends BaseTest{
 
     @Test
-    @DisplayName("Получить заказы авторизованного пользователя")
+    @DisplayName("Get orders of authorized user")
     public void testGetOrdersOfAuthUserIsSuccessful(){
-        userResponse = createUniqueUserAndReturnAsResponse(userRequest); //создать пользователя
+        userResponse = createUniqueUserAndReturnAsResponse(userRequest); //create user
         userResponseBody = userResponse.extract().body().as(UserResponse.class);
-        createOrderWithAuth(userResponseBody.getAccessToken(), ingredientsJson); //создать заказ
-         //получить список заказов
+        createOrderWithAuth(userResponseBody.getAccessToken(), ingredientsJson); //create order
+         //get the list of orders
         baseHttpClient.getRequestWithAuth(userResponseBody.getAccessToken(), ORDER_ENDPOINT)
                 .assertThat().statusCode(200)
                 .and().body("success", equalTo(true));
     }
 
     @Test
-    @DisplayName("Получить заказы неавторизованного пользователя")
+    @DisplayName("Get orders of unauthorized user")
     public void testGetOrdersOfNoAuthUserReturnsError(){
         baseHttpClient.getRequest(ORDER_ENDPOINT)
                 .assertThat().statusCode(401)

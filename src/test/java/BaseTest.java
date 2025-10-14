@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.given;
 public class BaseTest {
     BaseHttpClient baseHttpClient = new BaseHttpClient();
     Faker faker = new Faker();
-    protected static final String BASE_URL = "https://stellarburgers.nomoreparties.site";
+    protected static final String BASE_URL = "https://stellarburgers.education-services.ru";
     protected static final String CREATE_USER_ENDPOINT = "/api/auth/register";
     protected static final String LOGIN_USER_ENDPOINT = "/api/auth/login";
     protected static final String USER_ENDPOINT = "/api/auth/user";
@@ -45,37 +45,37 @@ public class BaseTest {
         RestAssured.baseURI = BASE_URL;
     }
 
-    @Step("Создать уникального пользователя и вернуть ответ")
+    @Step("Create a unique user and return response")
     public ValidatableResponse createUniqueUserAndReturnAsResponse(UserRequest request){
         return baseHttpClient.postRequest(CREATE_USER_ENDPOINT, request);
     }
 
-    @Step ("Получить Json строку ингедиентов")
+    @Step ("Get a Json string of burger ingredients")
     public String getIngredients(){
         String ingredients = given().get(BASE_URL + GET_INGREDIENTS_ENDPOINT).then().extract().path("data._id").toString();
         String cleanedIngredients = ingredients.replace("[", "").replace("]", "").replace(" ", ""); //убрать скобки и пробелы
-        String[] elements = cleanedIngredients.split(","); //разделить по запятой
+        String[] elements = cleanedIngredients.split(","); //comma separation
 
-        for (int i = 0; i < elements.length; i++) { //добавить кавычки
+        for (int i = 0; i < elements.length; i++) { //add quotes
             elements[i] = "\"" + elements[i] + "\"";
         }
 
-        String output = String.join(", ", elements); //соединить обратно в строку через запятую
+        String output = String.join(", ", elements); //concat back to a string separated by commas
         return ingredientsJson = "{\"ingredients\": [" + output + "]}";
     }
 
 
-    @Step("Создать заказ без авторизации")
+    @Step("Create order without authorization")
     public ValidatableResponse createOrderWithNoAuth(String ingredientsJson){
             return baseHttpClient.postRequestJsonString(ORDER_ENDPOINT, ingredientsJson);
     }
 
-    @Step("Создать заказ с авторизацией")
+    @Step("Create order with authorization")
     public ValidatableResponse createOrderWithAuth(String token, String ingredientsJson){
         return baseHttpClient.postRequestJsonStringWithAuth(token, ORDER_ENDPOINT, ingredientsJson);
     }
 
-    @Step("Удалить пользователя")
+    @Step("Delete User")
     public void deleteUser(String accessToken){
         try {
             baseHttpClient.deleteRequestWithAuth(accessToken, USER_ENDPOINT);
